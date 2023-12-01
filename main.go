@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"os/user"
 	"strings"
+	"time"
 
 	"github.com/SamFisher0208/CSCE4600/builtins"
 )
@@ -80,6 +81,8 @@ func handleInput(w io.Writer, input string, exit chan<- struct{}) error {
 		return builtins.EnvironmentVariables(w, args...)
 	case "echo":
 		return builtins.Echo(w, args...)
+	case "date":
+		return builtins.Date(w, time.Now)
 	case "exit":
 		exit <- struct{}{}
 		return nil
