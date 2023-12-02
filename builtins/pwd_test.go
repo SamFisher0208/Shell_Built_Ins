@@ -19,8 +19,13 @@ func TestPrintWorkingDirectory(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to get current working directory: %v", err)
 	}
-	defer os.Chdir(oldDir) // Restore the original working directory.
+	defer func() {
+		if chdirErr := os.Chdir(oldDir); chdirErr != nil {
+			t.Errorf("Failed to restore working directory: %v", chdirErr)
+		}
+	}()
 
+	// Attempt to change the working directory.
 	if err := os.Chdir(tempDir); err != nil {
 		t.Fatalf("Failed to change working directory: %v", err)
 	}
