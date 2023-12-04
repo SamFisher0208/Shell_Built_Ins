@@ -1,4 +1,4 @@
-module github.com/SamFisher0208/CSCE4600
+module github.com/SamFisher0208/Shell_Built_Ins
 
 go 1.21
 

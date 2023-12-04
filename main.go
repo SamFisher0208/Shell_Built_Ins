@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/SamFisher0208/CSCE4600/builtins"
+	"github.com/SamFisher0208/Shell_Built_Ins/builtins"
 )
 
 func main() {
