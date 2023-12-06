@@ -82,11 +82,13 @@ func handleInput(w io.Writer, input string, exit chan<- struct{}) error {
 	case "echo":
 		return builtins.Echo(w, args...)
 	case "date":
-		return builtins.Date(w, time.Now)
+		return builtins.Date(w, time.Now, args...)
 	case "pwd":
-		return builtins.PrintWorkingDirectory(w)
+		return builtins.PrintWorkingDirectory(w, args...)
 	case "mkdir":
 		return builtins.MakeDirectory(args...)
+	case "logname":
+		return builtins.Logname(w, args...)
 	case "exit":
 		exit <- struct{}{}
 		return nil

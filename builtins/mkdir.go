@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// Makes a new directory.
 func MakeDirectory(args ...string) error {
 	if len(args) != 1 {
 		return fmt.Errorf("%w: expected one argument (directory name)", ErrInvalidArgCount)
