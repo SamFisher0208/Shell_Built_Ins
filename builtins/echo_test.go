@@ -1,43 +1,61 @@
-package builtins
+package builtins_test
 
 import (
 	"bytes"
 	"testing"
+
+	"github.com/SamFisher0208/Shell_Built_Ins/builtins"
 )
 
 func TestEcho(t *testing.T) {
-	// Create a buffer to capture the output.
-	var buf bytes.Buffer
+	type args struct {
+		writer    *bytes.Buffer
+		arguments []string
+	}
+	tests := []struct {
+		name           string
+		args           args
+		expectedOutput string
+	}{
+		{
+			name: "echo 'Hello, World!'",
+			args: args{
+				writer:    &bytes.Buffer{},
+				arguments: []string{"Hello,", "World!"},
+			},
+			expectedOutput: "Hello, World!\n",
+		},
+		{
+			name: "echo empty arguments",
+			args: args{
+				writer:    &bytes.Buffer{},
+				arguments: []string{},
+			},
+			expectedOutput: "\n",
+		},
+		{
+			name: "echo special characters",
+			args: args{
+				writer:    &bytes.Buffer{},
+				arguments: []string{"Hello,", "Wörld!"},
+			},
+			expectedOutput: "Hello, Wörld!\n",
+		},
+	}
 
-	// Test case 1: Check if "Hello, World!" is echoed correctly.
-	err := Echo(&buf, "Hello,", "World!")
-	if err != nil {
-		t.Errorf("Echo failed with error: %v", err)
-	}
-	expectedOutput := "Hello, World!\n"
-	if buf.String() != expectedOutput {
-		t.Errorf("Expected output: %s, but got: %s", expectedOutput, buf.String())
-	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Execute the Echo function
+			err := builtins.Echo(tt.args.writer, tt.args.arguments...)
+			if err != nil {
+				t.Errorf("Echo failed with error: %v", err)
+			}
 
-	// Test case 2: Check if it handles an empty argument list.
-	buf.Reset() // Clear the buffer.
-	err = Echo(&buf)
-	if err != nil {
-		t.Errorf("Echo failed with error: %v", err)
-	}
-	expectedOutput = "\n" // Echo with no arguments should result in a newline.
-	if buf.String() != expectedOutput {
-		t.Errorf("Expected output: %s, but got: %s", expectedOutput, buf.String())
-	}
-
-	// Test case 3: Check if it handles special characters.
-	buf.Reset() // Clear the buffer.
-	err = Echo(&buf, "Hello,", "Wörld!")
-	if err != nil {
-		t.Errorf("Echo failed with error: %v", err)
-	}
-	expectedOutput = "Hello, Wörld!\n"
-	if buf.String() != expectedOutput {
-		t.Errorf("Expected output: %s, but got: %s", expectedOutput, buf.String())
+			// Check the output
+			actualOutput := tt.args.writer.String()
+			if actualOutput != tt.expectedOutput {
+				t.Errorf("Expected output: %s, but got: %s", tt.expectedOutput, actualOutput)
+			}
+		})
 	}
 }
